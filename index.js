@@ -1,11 +1,11 @@
 function findVerse() {
   const reference = $('.verse-ref-input').val();
   if (!reference) return;
-  $('.verse-ref-input').val('');
   fetch(`https://api.lsm.org/recver.php?String=${reference}&Out=json`)
     .then((res) => res.json())
     .then((data) => {
       $('.verses').empty();
+      $('.verse-ref-input').val('');
       if (data.verses.length > 1) {
         console.log(data.verses);
         $('.subheader').text('Only 30 verses can be displayed at a time.');
