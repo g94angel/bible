@@ -40,3 +40,7 @@ $('.verse-ref-input').on('keypress', (e) => {
     findVerse();
   }
 });
+const placeholderText =
+  'Start typing verse references to display verse text. (i.e. Gen 1:26, Col 3:4)';
+
+$('input').attr('placeholder', placeholderText);
