@@ -1,18 +1,21 @@
+function reset() {
+  $('.verses').empty();
+  $('.verse-ref-input').val('');
+  $('.warning').text('').hide();
+}
+
 function findVerse() {
   const reference = $('.verse-ref-input').val();
   if (!reference) return;
   fetch(`https://api.lsm.org/recver.php?String=${reference}&Out=json`)
     .then((res) => res.json())
     .then((data) => {
-      // console.log(data);
-      $('.verses').empty();
-      $('.verse-ref-input').val('');
+      reset();
       $('.copyright').text(data.copyright);
       console.log(data);
       if (data.verses.length > 1) {
         if (data.verses.length >= 30) {
-          console.log('verses length', data.verses.length);
-          $('.warning').text(data.message.slice(7));
+          $('.warning').text(data.message.slice(7)).show();
         }
         for (let i = 0; i < data.verses.length; i++) {
           const ref = data.verses[i].ref;
