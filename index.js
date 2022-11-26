@@ -4,11 +4,15 @@ function findVerse() {
   fetch(`https://api.lsm.org/recver.php?String=${reference}&Out=json`)
     .then((res) => res.json())
     .then((data) => {
+      // console.log(data);
       $('.verses').empty();
       $('.verse-ref-input').val('');
+      $('.copyright').text(data.copyright);
       if (data.verses.length > 1) {
-        console.log(data.verses);
-        $('.subheader').text('Only 30 verses can be displayed at a time.');
+        if (data.verses.length >= 30) {
+          console.log('verses length', data.verses.length);
+          $('.subheader').text(data.message.slice(7));
+        }
         for (let i = 0; i < data.verses.length; i++) {
           const ref = data.verses[i].ref;
           const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
