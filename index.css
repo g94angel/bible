@@ -12,12 +12,12 @@ body {
 
 .title {
   margin: 20px auto 0;
+  color: rgb(172, 34, 34);
 }
 
 .version {
   font-style: italic;
   font-size: 24px;
-  color: rgb(155, 155, 155)
 }
 
 .warning, .copyright {
@@ -27,6 +27,7 @@ body {
 .search-area, .output-area {
   margin: 0 auto;
   width: 75%;
+  max-width: 1000px;
 }
 
 .verse-ref-input {
@@ -70,20 +71,3 @@ strong {
   color: rgb(175, 175, 175);
 }
 
-
-@media (max-width: 730px) {
-.search-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- 
-}
-  .verse-ref-input {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .search-btn {
-    width: 100px;
-  }
-}

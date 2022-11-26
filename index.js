@@ -14,7 +14,7 @@ function findVerse() {
       $('.copyright').text(data.copyright);
       console.log(data);
       if (data.verses.length > 1) {
-        if (data.verses.length >= 30) {
+        if (data.message) {
           $('.warning').text(data.message.slice(7)).show();
         }
         for (let i = 0; i < data.verses.length; i++) {
