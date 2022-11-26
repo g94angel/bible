@@ -1,18 +1,38 @@
 body {
   font-size: 1.25rem;
-  /* margin: 0 auto; */
-  /* width: 100%; */
 }
 
-h2, .subheader, .search-area, .copyright {
+h2, .search-area, .copyright {
   text-align: center;
 }
 
-/* p {
-  margin: 10px;
-  margin-right: 10px;
-} */
-
 .output-area {
   margin: 0 10px;
+}
+
+.verse-ref-input {
+  padding: 10px 15px;
+  border-radius: 3px;
+  border: 1px solid black;
+  outline: none;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 3px;
+  border: 1px solid black;
+}
+
+strong {
+  color: rgb(172, 34, 34);
+}
+
+.warning {
+  color: rgb(172, 34, 34);
+  font-size: 18px;
+}
+
+.copyright {
+  font-size: 18px;
 }

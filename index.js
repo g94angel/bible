@@ -8,22 +8,23 @@ function findVerse() {
       $('.verses').empty();
       $('.verse-ref-input').val('');
       $('.copyright').text(data.copyright);
+      console.log(data);
       if (data.verses.length > 1) {
         if (data.verses.length >= 30) {
           console.log('verses length', data.verses.length);
-          $('.subheader').text(data.message.slice(7));
+          $('.warning').text(data.message.slice(7));
         }
         for (let i = 0; i < data.verses.length; i++) {
           const ref = data.verses[i].ref;
           const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-          const message = `${ref} - ${text}`;
+          const message = `<strong>${ref}</strong> - ${text}`;
 
           $('.verses').append(`<p>${message}</p>`);
         }
       } else {
         const ref = data.verses[0].ref;
         const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
-        const message = `${ref} - ${text}`;
+        const message = `<strong>${ref}</strong> - ${text}`;
         $('.verses').append(`<p>${message}</p>`);
       }
     })
