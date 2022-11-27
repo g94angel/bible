@@ -12,7 +12,6 @@ function findVerse() {
     .then((data) => {
       reset();
       $('.copyright').text(data.copyright);
-      console.log(data);
       if (data.verses.length > 1) {
         if (data.message) {
           $('.warning').text(data.message.slice(7)).show();
