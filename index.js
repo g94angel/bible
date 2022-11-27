@@ -47,15 +47,8 @@ $('input').attr('placeholder', placeholderText);
 
 // toggle
 $('.toggle-btn').click(() => {
-  console.log('clicked');
   $('.toggle-btn').toggleClass('toggled');
   $('body').toggleClass('dark');
   $('input').toggleClass('dark');
   $('.copyright').toggleClass('dark');
-  // $('#lightenText').toggleClass('unselected');
-  // $('#darkenText').toggleClass('unselected');
-
-  // toggleBtn.classList.toggle('toggled');
-  // lightenText.classList.toggle('unselected');
-  // darkenText.classList.toggle('unselected');
 });

@@ -30,6 +30,10 @@ body {
   max-width: 1000px;
 }
 
+.copyright {
+  margin-bottom: 10px;
+}
+
 .verse-ref-input {
   padding: 10px 5px;
   margin-right: 10px;
