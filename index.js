@@ -51,6 +51,7 @@ $('.toggle-btn').click(() => {
   $('.toggle-btn').toggleClass('toggled');
   $('body').toggleClass('dark');
   $('input').toggleClass('dark');
+  $('.copyright').toggleClass('dark');
   // $('#lightenText').toggleClass('unselected');
   // $('#darkenText').toggleClass('unselected');
 

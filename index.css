@@ -24,7 +24,7 @@ body {
   text-align: center;
 }
 
-.search-area, .output-area {
+.search-area, .output-area, .copyright {
   margin: 0 auto;
   width: 75%;
   max-width: 1000px;
@@ -68,7 +68,7 @@ strong {
 
 .copyright {
   font-size: 18px;
-  color: rgb(175, 175, 175);
+  /* color: rgb(175, 175, 175); */
 }
 
 /* toggle */
@@ -125,3 +125,6 @@ input.dark {
   border: 1px solid white;
 }
 
+.copyright.dark {
+  color: rgb(175, 175, 175);
+}
