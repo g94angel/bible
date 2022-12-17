@@ -3,6 +3,12 @@ function reset() {
   $('.verse-ref-input').val('');
   $('.warning').text('').hide();
 }
+// const userSearches = [];
+function logSearches(reference) {
+  $('.previous-searches-container')
+    .show()
+    .append(`<p class="reference">${reference}</p>`);
+}
 
 function findVerse() {
   const reference = $('.verse-ref-input').val();
@@ -11,6 +17,7 @@ function findVerse() {
     .then((res) => res.json())
     .then((data) => {
       reset();
+      logSearches(reference);
       $('.copyright').text(data.copyright);
       if (data.verses.length > 1) {
         if (data.message) {

@@ -137,3 +137,20 @@ input.dark {
 .warning.dark {
   color: #1F2937
 }
+
+.previous-searches-container {
+  margin: 0 auto 20px;
+  width: 75%;
+  max-width: 1000px;
+  text-align: center;
+}
+
+.previous-searches-title {
+  color: rgb(172, 34, 34);
+  margin: 0 0 10px 0;
+}
+
+.reference {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
