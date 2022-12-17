@@ -139,6 +139,7 @@ input.dark {
 }
 
 .previous-searches-container {
+  border-top: 1px solid rgb(172, 34, 34);
   margin: 0 auto 20px;
   width: 75%;
   max-width: 1000px;
@@ -147,7 +148,7 @@ input.dark {
 
 .previous-searches-title {
   color: rgb(172, 34, 34);
-  margin: 0 0 10px 0;
+  margin: 10px 0;
 }
 
 .reference {
