@@ -1,6 +1,8 @@
 body {
   margin: 0;
   font-size: 1.25rem;
+  background: whitesmoke;
+  color: #2b283a;
 }
 
 .title-area {
@@ -38,10 +40,12 @@ body {
   padding: 10px 5px;
   margin-right: 10px;
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid #2b283a;
   outline: none;
   font-size: 1rem;
   width: 600px;
+  color: #2b283a;
+  background: whitesmoke;
 }
 
 .search-area {
@@ -102,7 +106,7 @@ strong {
   border-radius: 50%;
   height: 20px;
   width: 20px;
-  background-color: white;
+  background-color: whitesmoke;
   transition: all 250ms;
 }
 
@@ -121,13 +125,13 @@ strong {
 
 body.dark {
   background-color: #1F2937;
-  color: white;
+  color: whitesmoke;
 }
 
 input.dark {
   background-color: #1F2937;
-  color: white;
-  border: 1px solid white;
+  color: whitesmoke;
+  border: 1px solid whitesmoke;
 }
 
 .copyright.dark {
