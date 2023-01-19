@@ -6,25 +6,29 @@ function reset() {
 
 let previousVisible = false;
 
-function logSearches(reference) {
-  $('.previous').append(
-    `
+const loggedSearches = [];
+
+// trying to iterate through logged searches and adding the item and its div to the right container
+function logSearches() {
+  let htmlElements = '';
+  console.log(loggedSearches);
+  for (const search of loggedSearches) {
+    htmlElements += `
       <div class="ref-container">
         <p class="reference">
-          ${reference}
+          ${search}
         </p>
-        <button class="btn save-btn" id="${reference}">
+        <button class="btn save-btn" id="${search}">
           Save search
         </button>
       </div>
-    `
-  );
-  $('.save-btn').click(function () {
-    console.log('saving', this.id);
-    // localStorage.setItem('test', this.id);
-    appendToSaveContainer(this.id);
-  });
-
+    `;
+    $('.save-btn').click(function () {
+      // console.log('saving', this.id);
+      appendToSaveContainer(search);
+    });
+  }
+  $('.searches-title').append(htmlElements);
   if ($('.previous').is(':hidden')) {
     console.log('previous is hidden, will show now');
     $('.previous').show();
@@ -66,7 +70,8 @@ function fetchData(reference) {
     .then((res) => res.json())
     .then((data) => {
       reset();
-      logSearches(reference);
+      loggedSearches.push(reference);
+      logSearches();
       $('.copyright').text(data.copyright);
       if (data.verses.length > 1) {
         if (data.message) {
