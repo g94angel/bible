@@ -20,47 +20,45 @@ function logSearches(reference) {
     `
   );
   $('.save-btn').click(function () {
-    console.log('saving', reference);
+    console.log('saving', this.id);
     // localStorage.setItem('test', this.id);
-    $('.saved').append(
-      `
-        <div class="ref-container">
-          <p class="reference">
-            ${reference}
-          </p>
-          <button class="btn search-verses-btn" id="${reference}">
-            Search verses
-          </button>
-        </div>
-      `
-    );
-    $('.search-verses-btn').click(function () {
-      // console.log(this.id);
-      console.log('searching for verses');
-      console.log(this.id);
-      findVerse(this.id);
-    });
-    if ($('.saved').is(':hidden')) {
-      $('.saved').show();
-    }
+    appendToSaveContainer(this.id);
   });
+
   if ($('.previous').is(':hidden')) {
     console.log('previous is hidden, will show now');
     $('.previous').show();
   }
 }
 
-function findVerse(input) {
-  // console.log('going to find a verse');
-  console.log('this is the input', input);
-  const ref = $('.verse-ref-input').val();
-  console.log('this is reference', ref);
+function appendToSaveContainer(id) {
+  $('.saved').append(
+    `
+      <div class="ref-container">
+        <p class="reference">
+          ${id}
+        </p>
+        <button class="btn search-verses-btn" id="${id}">
+          Search verses
+        </button>
+      </div>
+    `
+  );
+  $('.search-verses-btn').click(function () {
+    // console.log(this.id);
+    console.log('searching for', this.id);
+    // console.log(this.id);
+    fetchData(this.id);
+  });
+  if ($('.saved').is(':hidden')) {
+    $('.saved').show();
+  }
+}
 
-  // if (!ref || input) return;
-  const answer = input || ref;
-  console.log('answer', answer);
-  if (!answer) return;
-  fetchData(answer);
+function findVerse() {
+  const ref = $('.verse-ref-input').val();
+  if (ref.length === 0) return;
+  fetchData(ref);
 }
 
 function fetchData(reference) {
