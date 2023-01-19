@@ -4,74 +4,44 @@ function reset() {
   $('.warning').text('').hide();
 }
 
-let previousVisible = false;
+// creating cache to store previous searches so don't have fetch data
+const loggedSearches = {};
 
-const loggedSearches = [];
+function logSearches(search) {
+  if (loggedSearches[search]) return;
+  else loggedSearches[search] = search;
 
-// trying to iterate through logged searches and adding the item and its div to the right container
-function logSearches() {
-  let htmlElements = '';
-  console.log(loggedSearches);
-  for (const search of loggedSearches) {
-    htmlElements += `
+  $('.searches-title').append(`
       <div class="ref-container">
         <p class="reference">
           ${search}
         </p>
-        <button class="btn save-btn" id="${search}">
-          Save search
+        <button class="btn search-btn" id="${search}">
+          Search
         </button>
       </div>
-    `;
-    $('.save-btn').click(function () {
-      // console.log('saving', this.id);
-      appendToSaveContainer(search);
-    });
-  }
-  $('.searches-title').append(htmlElements);
-  if ($('.previous').is(':hidden')) {
-    console.log('previous is hidden, will show now');
-    $('.previous').show();
-  }
-}
-
-function appendToSaveContainer(id) {
-  $('.saved').append(
-    `
-      <div class="ref-container">
-        <p class="reference">
-          ${id}
-        </p>
-        <button class="btn search-verses-btn" id="${id}">
-          Search verses
-        </button>
-      </div>
-    `
-  );
-  $('.search-verses-btn').click(function () {
-    // console.log(this.id);
-    console.log('searching for', this.id);
-    // console.log(this.id);
+    `);
+  $('button').on('click', $(`#${search}`), function () {
     fetchData(this.id);
   });
-  if ($('.saved').is(':hidden')) {
-    $('.saved').show();
-  }
+
+  $('.previous-container').show();
 }
 
 function findVerse() {
-  const ref = $('.verse-ref-input').val();
-  if (ref.length === 0) return;
-  fetchData(ref);
+  const reference = $('.verse-ref-input').val();
+  if (reference.length === 0) return;
+  fetchData(reference);
 }
 
-function fetchData(reference) {
-  fetch(`https://api.lsm.org/recver.php?String=${reference}&Out=json`)
+function fetchData(ref) {
+  fetch(`https://api.lsm.org/recver.php?String=${ref}&Out=json`)
     .then((res) => res.json())
     .then((data) => {
       reset();
-      loggedSearches.push(reference);
-      logSearches();
+      logSearches(ref);
+
+      // everything below works
       $('.copyright').text(data.copyright);
       if (data.verses.length > 1) {
         if (data.message) {
@@ -94,7 +64,10 @@ function fetchData(reference) {
     .catch((err) => console.log(err));
 }
 
-$('.search-btn').click(findVerse);
+// everything below works
+
+$('.main-search-btn').on('click', findVerse);
+
 $('.verse-ref-input').on('keypress', (e) => {
   if (e.key === 'Enter') {
     findVerse();
@@ -111,9 +84,4 @@ $('.toggle-btn').click(() => {
   $('body').toggleClass('dark');
   $('input').toggleClass('dark');
   $('.copyright').toggleClass('dark');
-});
-
-$('.clear-btn').click(function () {
-  console.log('clearing storage');
-  // localStorage.clear();
 });
