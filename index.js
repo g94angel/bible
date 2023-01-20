@@ -79,22 +79,14 @@ function fetchData(ref) {
         console.log('here');
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-        const message = `
-          <p class='verse-text' onclick="log()">
-            <strong>${ref}</strong> - ${text} 
-          </p>`;
-
+        const message = `<p class='verse-text'><strong>${ref}</strong> - ${text} </p>`;
         $('.verses').append(message);
       }
     } else {
       const ref = data.verses[0].ref;
       const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
       const message = `
-        <p class='verse-text'>
-          <strong>
-            ${ref}
-          </strong> - ${text}
-        </p>`;
+        <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
       $('.verses').append(message);
     }
     $('.verse-text').click(function () {
@@ -119,12 +111,7 @@ function fetchData(ref) {
             const ref = data.verses[i].ref;
             const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
             const message = `
-              <p class='verse-text'>
-                <strong>
-                  ${ref}
-                </strong> - ${text}
-              </p>
-            `;
+              <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
             $('.verses').append(message);
           }
           $('.verse-text').click(function () {
@@ -149,14 +136,10 @@ function fetchData(ref) {
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
           const message = `
-            <p class='verse-text'>
-              <strong>
-                ${ref}
-              </strong> - ${text} 
-            </p>`;
+            <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
           $('.verses').append(`<p>${message}</p>`);
           $('.verse-text').click(function () {
-            navigator.clipboard.writeText($(this).text().trim());
+            navigator.clipboard.writeText($(this).text());
           });
         }
         logSearches(ref.trim());
