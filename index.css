@@ -68,8 +68,10 @@ button:hover {
   opacity: 50%;
 }
 
-strong {
+.bold {
   color: rgb(172, 34, 34);
+  font-weight: 700;
+  margin: 0;
 }
 
 .warning {
@@ -86,13 +88,9 @@ strong {
 
 /* toggle */
 .toggle {
-  display: flex;
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 5px;
-  align-items: center;
-  margin-bottom: 20px;
-  border-radius: 5px;
   padding: 15px;
 }
 
@@ -146,6 +144,10 @@ input.dark {
   color: #1F2937
 }
 
+.reference.dark {
+  color:rgb(172, 34, 34);
+}
+
 .previous-searches-container {
   border-top: 1px solid rgb(172, 34, 34);
   margin: 0 auto 20px;
@@ -184,14 +186,6 @@ input.dark {
 
 .verse-text {
   cursor: pointer;
-}
-
-.copy-btn {
-  margin-left: auto;;
-}
-
-.copy-btn:hover {
-  display: inline;
 }
 
 .copy-msg {

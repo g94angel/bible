@@ -16,7 +16,6 @@ $('.toggle-btn').click(() => {
   $('.toggle-btn').toggleClass('toggled');
   $('body').toggleClass('dark');
   $('input').toggleClass('dark');
-  $('.copyright').toggleClass('dark');
 });
 
 // this function clears the screen
@@ -27,7 +26,7 @@ function reset() {
   $('.verse-ref-input').val('');
   // removes warning
   $('.warning').text('').hide();
-  $('.copyright').hide();
+  // $('.copyright').hide();
   $('.copy-msg').hide();
 }
 
@@ -35,11 +34,9 @@ function reset() {
 const loggedSearches = {};
 
 function logSearches(search) {
-  // console.log('logging search', search);
-
   $('#previous-searches').append(`
       <div class="ref-container">
-        <p class="reference">
+        <p class="bold">
           ${search}
         </p>
         <button class="btn search-btn" id="${search}">
@@ -49,7 +46,6 @@ function logSearches(search) {
     `);
 
   $('.search-btn').on('click', function () {
-    // console.log(this.id);
     fetchData(this.id);
   });
 
@@ -68,10 +64,8 @@ function findVerse() {
 function fetchData(ref) {
   // if reference is in cache - has been searched before
   if (loggedSearches[ref]) {
-    // console.log('inside stored log', loggedSearches[ref]);
     const data = loggedSearches[ref];
     reset();
-    $('.copyright').text(data.copyright).show();
     $('.copy-msg').show();
     if (data.verses.length > 1) {
       if (data.message) {
@@ -81,14 +75,14 @@ function fetchData(ref) {
         console.log('here');
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-        const message = `<p class='verse-text'><strong>${ref}</strong> - ${text} </p>`;
+        const message = `<p class='verse-text'><span class='bold'>${ref}</span> - ${text} </p>`;
         $('.verses').append(message);
       }
     } else {
       const ref = data.verses[0].ref;
       const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
       const message = `
-        <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
+        <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
       $('.verses').append(message);
     }
     $('.verse-text').click(function () {
@@ -97,17 +91,15 @@ function fetchData(ref) {
       $(this).addClass('copied');
       setTimeout(() => {
         $(this).removeClass('copied');
-      }, 2000);
+      }, 100);
     });
   } // if reference is not in cache - has never been searched
   else {
-    // console.log('not inside stored log', loggedSearches);
     fetch(`https://api.lsm.org/recver.php?String=${ref}&Out=json`)
       .then((res) => res.json())
       .then((data) => {
         reset();
         loggedSearches[ref] = data;
-        $('.copyright').text(data.copyright).show();
         $('.copy-msg').show();
 
         if (data.verses.length > 1) {
@@ -119,7 +111,7 @@ function fetchData(ref) {
             const ref = data.verses[i].ref;
             const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
             const message = `
-              <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
+              <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
             $('.verses').append(message);
           }
           $('.verse-text').click(function () {
@@ -128,9 +120,10 @@ function fetchData(ref) {
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
-            }, 500);
+            }, 100);
           });
         } else {
+          // error handling
           if (
             data.verses[0].text === 'No such reference' ||
             data.verses[0].text.includes('No such chapter in')
@@ -143,14 +136,13 @@ function fetchData(ref) {
               .text(`${data.inputstring} is not in the Bible.`);
             setTimeout(() => {
               $('.does-not-exist').hide().text('');
-              // reset();
-            }, 500);
+            }, 2000);
             return;
           }
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
           const message = `
-            <p class='verse-text'><strong>${ref}</strong> - ${text}</p>`;
+            <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
           $('.verses').append(`<p>${message}</p>`);
           $('.verse-text').click(function () {
             navigator.clipboard.writeText($(this).text());
@@ -158,7 +150,7 @@ function fetchData(ref) {
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
-            }, 500);
+            }, 100);
           });
         }
         logSearches(ref.trim());
