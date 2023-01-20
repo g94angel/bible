@@ -53,6 +53,7 @@ function logSearches(search) {
 }
 
 function findVerse() {
+  $('.output-area').focus();
   const reference = $('.verse-ref-input').val();
   if (reference.length === 0) {
     return;
