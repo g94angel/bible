@@ -128,7 +128,7 @@ function fetchData(ref) {
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
-            }, 1000);
+            }, 500);
           });
         } else {
           if (
@@ -144,7 +144,7 @@ function fetchData(ref) {
             setTimeout(() => {
               $('.does-not-exist').hide().text('');
               // reset();
-            }, 1500);
+            }, 500);
             return;
           }
           const ref = data.verses[0].ref;
@@ -158,7 +158,7 @@ function fetchData(ref) {
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
-            }, 1000);
+            }, 500);
           });
         }
         logSearches(ref.trim());
