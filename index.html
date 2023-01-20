@@ -10,30 +10,38 @@
   <title>Bible</title>
 </head>
 <body class="dark">
-  <div class="title-area">
+  <header class="title-area">
     <h2 class="title" >HOLY BIBLE</h2>
     <p class="version" >Recovery Version</p>
-  </div>
+  </header>
   <!-- TOGGLE -->
   <div class="toggle ">
     <div class="toggle-btn toggled">
       <div class="inner-circle"></div>
     </div>
   </div>
-  <div class="search-area">
-    <input class="verse-ref-input dark" type="text" />
-    <button class="main-search-btn">Search</button>
-  </div>
+  <section>
+    <div class="search-area">
+      <input class="verse-ref-input dark" type="text" />
+      <button class="main-search-btn">Search</button>
+    </div>
+  </section>
   <p class="copy-msg" hidden>Click on text to copy.</p>
-  <div class="output-area">
-    <h2 class="does-not-exist" hidden></h2>
-    <div class="verses"></div>
-    <p class="warning" hidden></p>
-  </div>
-  <div class="previous-searches-container" hidden>
-    <p class="previous-searches-title bold" id="previous-searches">Previous searches</p>
-  </div>
-  <p class="copyright">Holy Bible Recovery Version (text-only edition) © 2022 Living Stream Ministry www.lsm.org</p>
+  <section>
+    <div class="output-area">
+      <h2 class="does-not-exist" hidden></h2>
+      <div class="verses"></div>
+      <p class="warning" hidden></p>
+    </div>
+  </section>
+  <section>
+    <div class="previous-searches-container" hidden>
+      <p class="previous-searches-title bold" id="previous-searches">Previous searches</p>
+    </div>
+  </section>
+  <footer>
+    <p class="copyright">Holy Bible Recovery Version (text-only edition) © 2022 Living Stream Ministry www.lsm.org</p>
+  </footer>
   
   <script src="index.js"></script>
 </body>
