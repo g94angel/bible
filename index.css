@@ -193,3 +193,13 @@ input.dark {
 .copy-btn:hover {
   display: inline;
 }
+
+.copy-msg {
+  text-align: center;
+  font-size: 18px;
+  margin: 0;
+}
+
+.copied {
+  opacity: 50%;
+}

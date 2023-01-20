@@ -28,6 +28,7 @@ function reset() {
   // removes warning
   $('.warning').text('').hide();
   $('.copyright').hide();
+  $('.copy-msg').hide();
 }
 
 // creating cache to store previous searches so don't have fetch data, optimized results
@@ -71,6 +72,7 @@ function fetchData(ref) {
     const data = loggedSearches[ref];
     reset();
     $('.copyright').text(data.copyright).show();
+    $('.copy-msg').show();
     if (data.verses.length > 1) {
       if (data.message) {
         $('.warning').text(data.message.slice(7)).show();
@@ -91,6 +93,11 @@ function fetchData(ref) {
     }
     $('.verse-text').click(function () {
       navigator.clipboard.writeText($(this).text().trim());
+      console.log(this);
+      $(this).addClass('copied');
+      setTimeout(() => {
+        $(this).removeClass('copied');
+      }, 2000);
     });
   } // if reference is not in cache - has never been searched
   else {
@@ -101,6 +108,7 @@ function fetchData(ref) {
         reset();
         loggedSearches[ref] = data;
         $('.copyright').text(data.copyright).show();
+        $('.copy-msg').show();
 
         if (data.verses.length > 1) {
           if (data.message) {
@@ -116,6 +124,11 @@ function fetchData(ref) {
           }
           $('.verse-text').click(function () {
             navigator.clipboard.writeText($(this).text().trim());
+            console.log(this);
+            $(this).addClass('copied');
+            setTimeout(() => {
+              $(this).removeClass('copied');
+            }, 1000);
           });
         } else {
           if (
@@ -124,6 +137,7 @@ function fetchData(ref) {
           ) {
             console.log('does not exist');
             console.log(data.inputstring);
+            $('.copy-msg').hide();
             $('.does-not-exist')
               .show()
               .text(`${data.inputstring} is not in the Bible.`);
@@ -140,6 +154,11 @@ function fetchData(ref) {
           $('.verses').append(`<p>${message}</p>`);
           $('.verse-text').click(function () {
             navigator.clipboard.writeText($(this).text());
+            console.log(this);
+            $(this).addClass('copied');
+            setTimeout(() => {
+              $(this).removeClass('copied');
+            }, 1000);
           });
         }
         logSearches(ref.trim());
