@@ -145,7 +145,7 @@ input.dark {
   color: #1F2937
 }
 
-.searches-container {
+.previous-searches-container {
   border-top: 1px solid rgb(172, 34, 34);
   margin: 0 auto 20px;
   width: 75%;
@@ -153,15 +153,18 @@ input.dark {
   /* text-align: center; */
 }
 
-.searches-title {
+.previous-searches-title {
   color: rgb(172, 34, 34);
   margin: 10px 0;
   text-align: center;
 }
 
 .reference {
-  margin: 0 0 10px 0;
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.2rem;
+  color: whitesmoke;
+  text-align: left;
+  line-height: 30px;
 }
 
 .ref-container {
@@ -169,7 +172,7 @@ input.dark {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  /* width: 90%; */
+  width: 50%;
   margin: 0 auto;
   gap: 20px;
 }

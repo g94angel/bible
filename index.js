@@ -29,14 +29,11 @@ function reset() {
   $('.warning').text('').hide();
 }
 
-// creating cache to store previous searches so don't have fetch data
+// creating cache to store previous searches so don't have fetch data, optimized results
 const loggedSearches = {};
-console.log('stored log', loggedSearches);
 
 function logSearches(search) {
-  console.log('logging search', search);
-  // if (loggedSearches[search]) return;
-  // else loggedSearches[search] = search;
+  // console.log('logging search', search);
 
   $('#previous-searches').append(`
       <div class="ref-container">
@@ -48,23 +45,20 @@ function logSearches(search) {
         </button>
       </div>
     `);
-  // // $('.reference').text(search);
-  // PROBLEM IS HERE
+
   $('.search-btn').on('click', function () {
-    fetchData(this.id);
     // console.log(this.id);
+    fetchData(this.id);
   });
 
-  $('.previous-container').show();
+  $('.previous-searches-container').show();
 }
 
 function findVerse() {
   const reference = $('.verse-ref-input').val();
   if (reference.length === 0) {
-    console.log('nothing inputted');
     return;
   } else {
-    console.log(reference);
     fetchData(reference);
   }
 }
@@ -72,13 +66,9 @@ function findVerse() {
 function fetchData(ref) {
   // if reference is in cache - has been searched before
   if (loggedSearches[ref]) {
-    console.log('inside stored log', loggedSearches[ref]);
+    // console.log('inside stored log', loggedSearches[ref]);
     const data = loggedSearches[ref];
     reset();
-    // no need to add searches to container since they have been appended already
-    // logSearches(ref);
-
-    // everything below works
     $('.copyright').text(data.copyright);
     if (data.verses.length > 1) {
       if (data.message) {
@@ -99,22 +89,15 @@ function fetchData(ref) {
     }
   } // if reference is not in cache - has never been searched
   else {
-    console.log('not inside stored log', loggedSearches);
+    // console.log('not inside stored log', loggedSearches);
     fetch(`https://api.lsm.org/recver.php?String=${ref}&Out=json`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('this is the data from the server', data);
         reset();
-
         loggedSearches[ref] = data;
-        console.log('new search', loggedSearches);
-        // return;
-
-        // everything below works
         $('.copyright').text(data.copyright);
-        // console.log('data verses ', data.verses);
+
         if (data.verses.length > 1) {
-          console.log(data.verses.length);
           if (data.message) {
             // if there are more than 30 verses in request
             $('.warning').text(data.message.slice(7)).show();
@@ -127,13 +110,11 @@ function fetchData(ref) {
             $('.verses').append(`<p>${message}</p>`);
           }
         } else {
-          console.log(data.verses.length);
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
           const message = `<strong>${ref}</strong> - ${text}`;
           $('.verses').append(`<p>${message}</p>`);
         }
-        // PROBLEM IS HERE
         logSearches(ref.trim());
       })
       .catch((err) => console.log(err));
