@@ -27,6 +27,7 @@ function reset() {
   $('.verse-ref-input').val('');
   // removes warning
   $('.warning').text('').hide();
+  $('.copyright').hide();
 }
 
 // creating cache to store previous searches so don't have fetch data, optimized results
@@ -69,7 +70,7 @@ function fetchData(ref) {
     // console.log('inside stored log', loggedSearches[ref]);
     const data = loggedSearches[ref];
     reset();
-    $('.copyright').text(data.copyright);
+    $('.copyright').text(data.copyright).show();
     if (data.verses.length > 1) {
       if (data.message) {
         $('.warning').text(data.message.slice(7)).show();
@@ -95,7 +96,7 @@ function fetchData(ref) {
       .then((data) => {
         reset();
         loggedSearches[ref] = data;
-        $('.copyright').text(data.copyright);
+        $('.copyright').text(data.copyright).show();
 
         if (data.verses.length > 1) {
           if (data.message) {
@@ -110,6 +111,21 @@ function fetchData(ref) {
             $('.verses').append(`<p>${message}</p>`);
           }
         } else {
+          if (
+            data.verses[0].text === 'No such reference' ||
+            data.verses[0].text.includes('No such chapter in')
+          ) {
+            console.log('does not exist');
+            console.log(data.inputstring);
+            $('.does-not-exist')
+              .show()
+              .text(`${data.inputstring} is not in the Bible.`);
+            setTimeout(() => {
+              $('.does-not-exist').hide().text('');
+              // reset();
+            }, 1500);
+            return;
+          }
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
           const message = `<strong>${ref}</strong> - ${text}`;

@@ -51,6 +51,7 @@ body {
 .search-area {
   display: flex;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 button {
@@ -175,4 +176,8 @@ input.dark {
   width: 75%;
   margin: 0 auto;
   gap: 20px;
+}
+.does-not-exist {
+  text-align: center;
+  color:rgb(172, 34, 34);
 }
