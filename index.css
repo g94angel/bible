@@ -71,6 +71,10 @@ button:hover {
   opacity: 50%;
 }
 
+button:focus {
+  opacity: 100%;
+}
+
 .bold {
   color: rgb(172, 34, 34);
   font-weight: 700;
