@@ -181,3 +181,15 @@ input.dark {
   text-align: center;
   color:rgb(172, 34, 34);
 }
+
+.verse-text {
+  cursor: pointer;
+}
+
+.copy-btn {
+  margin-left: auto;;
+}
+
+.copy-btn:hover {
+  display: inline;
+}

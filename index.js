@@ -76,18 +76,30 @@ function fetchData(ref) {
         $('.warning').text(data.message.slice(7)).show();
       }
       for (let i = 0; i < data.verses.length; i++) {
+        console.log('here');
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-        const message = `<strong>${ref}</strong> - ${text}`;
+        const message = `
+          <p class='verse-text' onclick="log()">
+            <strong>${ref}</strong> - ${text} 
+          </p>`;
 
-        $('.verses').append(`<p>${message}</p>`);
+        $('.verses').append(message);
       }
     } else {
       const ref = data.verses[0].ref;
       const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
-      const message = `<strong>${ref}</strong> - ${text}`;
-      $('.verses').append(`<p>${message}</p>`);
+      const message = `
+        <p class='verse-text'>
+          <strong>
+            ${ref}
+          </strong> - ${text}
+        </p>`;
+      $('.verses').append(message);
     }
+    $('.verse-text').click(function () {
+      navigator.clipboard.writeText($(this).text().trim());
+    });
   } // if reference is not in cache - has never been searched
   else {
     // console.log('not inside stored log', loggedSearches);
@@ -106,10 +118,18 @@ function fetchData(ref) {
           for (let i = 0; i < data.verses.length; i++) {
             const ref = data.verses[i].ref;
             const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-            const message = `<strong>${ref}</strong> - ${text}`;
-
-            $('.verses').append(`<p>${message}</p>`);
+            const message = `
+              <p class='verse-text'>
+                <strong>
+                  ${ref}
+                </strong> - ${text}
+              </p>
+            `;
+            $('.verses').append(message);
           }
+          $('.verse-text').click(function () {
+            navigator.clipboard.writeText($(this).text().trim());
+          });
         } else {
           if (
             data.verses[0].text === 'No such reference' ||
@@ -128,8 +148,16 @@ function fetchData(ref) {
           }
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
-          const message = `<strong>${ref}</strong> - ${text}`;
+          const message = `
+            <p class='verse-text'>
+              <strong>
+                ${ref}
+              </strong> - ${text} 
+            </p>`;
           $('.verses').append(`<p>${message}</p>`);
+          $('.verse-text').click(function () {
+            navigator.clipboard.writeText($(this).text().trim());
+          });
         }
         logSearches(ref.trim());
       })
