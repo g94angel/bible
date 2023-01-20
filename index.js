@@ -72,7 +72,6 @@ function fetchData(ref) {
         $('.warning').text(data.message.slice(7)).show();
       }
       for (let i = 0; i < data.verses.length; i++) {
-        console.log('here');
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
         const message = `<p class='verse-text'><span class='bold'>${ref}</span> - ${text} </p>`;
@@ -87,7 +86,6 @@ function fetchData(ref) {
     }
     $('.verse-text').click(function () {
       navigator.clipboard.writeText($(this).text().trim());
-      console.log(this);
       $(this).addClass('copied');
       setTimeout(() => {
         $(this).removeClass('copied');
@@ -116,7 +114,6 @@ function fetchData(ref) {
           }
           $('.verse-text').click(function () {
             navigator.clipboard.writeText($(this).text().trim());
-            console.log(this);
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
@@ -128,8 +125,6 @@ function fetchData(ref) {
             data.verses[0].text === 'No such reference' ||
             data.verses[0].text.includes('No such chapter in')
           ) {
-            console.log('does not exist');
-            console.log(data.inputstring);
             $('.copy-msg').hide();
             $('.does-not-exist')
               .show()
@@ -146,7 +141,6 @@ function fetchData(ref) {
           $('.verses').append(`<p>${message}</p>`);
           $('.verse-text').click(function () {
             navigator.clipboard.writeText($(this).text());
-            console.log(this);
             $(this).addClass('copied');
             setTimeout(() => {
               $(this).removeClass('copied');
