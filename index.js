@@ -98,10 +98,11 @@ function fetchData(ref) {
       .then((res) => res.json())
       .then((data) => {
         reset();
-        loggedSearches[ref] = data;
         $('.copy-msg').show();
-
+        console.log(data);
         if (data.verses.length > 1) {
+          loggedSearches[ref] = data;
+          $('.does-not-exist').hide();
           if (data.message) {
             // if there are more than 30 verses in request
             $('.warning').text(data.message.slice(7)).show();
@@ -122,14 +123,13 @@ function fetchData(ref) {
           });
         } else {
           // error handling
-          if (
-            data.verses[0].text === 'No such reference' ||
-            data.verses[0].text.includes('No such chapter in')
-          ) {
+          if (data.verses[0].text.includes('No such')) {
             $('.copy-msg').hide();
             $('.does-not-exist')
               .show()
-              .text(`${data.inputstring} is not in the Bible.`);
+              .text(
+                `${data.inputstring} is an invalid verse reference. Try again.`
+              );
             setTimeout(() => {
               $('.does-not-exist').hide().text('');
             }, 2000);
