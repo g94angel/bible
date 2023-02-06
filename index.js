@@ -26,8 +26,10 @@ function reset() {
   $('.verse-ref-input').val('');
   // removes warning
   $('.warning').text('').hide();
-  // $('.copyright').hide();
+  // hides message about copying text by clicking
   $('.copy-msg').hide();
+  // hides invalid reference message
+  $('.does-not-exist').hide();
 }
 
 // creating cache to store previous searches so don't have fetch data, optimized results
@@ -53,7 +55,7 @@ function logSearches(search) {
 }
 
 function findVerse() {
-  $('.output-area').focus();
+  // $('.output-area').focus();
   const reference = $('.verse-ref-input').val();
   if (reference.length === 0) {
     return;
@@ -99,10 +101,8 @@ function fetchData(ref) {
       .then((data) => {
         reset();
         $('.copy-msg').show();
-        console.log(data);
         if (data.verses.length > 1) {
           loggedSearches[ref] = data;
-          $('.does-not-exist').hide();
           if (data.message) {
             // if there are more than 30 verses in request
             $('.warning').text(data.message.slice(7)).show();
@@ -127,9 +127,7 @@ function fetchData(ref) {
             $('.copy-msg').hide();
             $('.does-not-exist')
               .show()
-              .text(
-                `${data.inputstring} is an invalid verse reference. Try again.`
-              );
+              .text(`${data.inputstring} is an invalid reference. Try again.`);
             setTimeout(() => {
               $('.does-not-exist').hide().text('');
             }, 2000);
