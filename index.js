@@ -66,9 +66,8 @@ function findVerse() {
 
 function fetchData(ref) {
   // if reference is in cache - has been searched before
-  console.log(loggedSearches);
+
   if (loggedSearches[ref]) {
-    console.log(loggedSearches[ref], 'is in cache');
     const data = loggedSearches[ref];
     reset();
     $('.copy-msg').show();
@@ -104,7 +103,7 @@ function fetchData(ref) {
         reset();
         $('.copy-msg').show();
         loggedSearches[ref] = data;
-        console.log(loggedSearches);
+
         if (data.verses.length > 1) {
           if (data.message) {
             // if there are more than 30 verses in request
