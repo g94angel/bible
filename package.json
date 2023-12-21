@@ -1,0 +1,17 @@
+{
+  "name": "bible",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "View deployed app here: https://rcv.netlify.app/",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.22.1",
+    "vite": "^5.0.10"
+  }
+}

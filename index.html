@@ -26,27 +26,37 @@
   </div>
   <section>
     <div class="search-area">
-      <input class="verse-ref-input dark" type="text" />
-      <button class="main-search-btn">Search</button>
+      <input class="verse-input dark" type="text" />
+      <button class="primary search-btn">Search</button>
+    </div>
+    <div class="search-area">
+      <input class="question-input dark" type="text" />
+      <button class="secondary search-btn">Search</button>
     </div>
   </section>
-  <p class="copy-msg" hidden>Click on a verse to copy its text.</p>
   <section>
-    <div class="output-area">
-      <h2 class="does-not-exist" hidden></h2>
-      <div class="verses"></div>
+    <div class="loader-container">
+      <div class="titles">
+      </div>
+      <div class="loader" hidden></div>
+    </div>
+  </section>
+  <p class="copy-msg" hidden>Click to copy text.</p>
+  <section>
+    <div class="search-results-area">
+      <h3 class="does-not-exist" hidden></h3>
+      <div class="search-results"></div>
       <p class="warning" hidden></p>
     </div>
   </section>
   <section>
     <div class="previous-searches-container" hidden>
-      <p class="previous-searches-title bold" id="previous-searches">Previous verses</p>
+      <p class="previous-searches-title bold" id="previous-searches">Previous searches</p>
     </div>
   </section>
   <footer>
-    <p class="copyright">Holy Bible Recovery Version (text-only edition) © 2022 Living Stream Ministry www.lsm.org</p>
+    <p class="copyright"></p>
   </footer>
-  
-  <script src="index.js"></script>
+  <script src="index.js" type="module"></script>
 </body>
 </html>

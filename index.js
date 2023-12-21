@@ -1,15 +1,34 @@
-// adds findVerse func to main-search-btn
-$('.main-search-btn').click(findVerse);
+import { main } from './ai';
 
-$('.verse-ref-input').on('keypress', (e) => {
+// creating cache to store previous searches so don't have fetch data, optimized results
+const loggedSearches = {};
+
+// adds findVerse func to primary button
+$('.primary').click(findVerse);
+// adds askChatGPT func to secondary button
+$('.secondary').click(askChatGPT);
+
+const placeholderText = 'Search for verses (i.e. Gen 1:26, Col 3:4)';
+const secondPlaceholderText = 'Where does the Bible talk about ...';
+
+$('input').attr('placeholder', placeholderText);
+$('.question-input').attr('placeholder', secondPlaceholderText);
+
+$('.question-input').on('keypress', (e) => {
+  if (e.key === 'Enter') {
+    askChatGPT();
+  }
+});
+
+$('.verse-input').on('keypress', (e) => {
   if (e.key === 'Enter') {
     findVerse();
   }
 });
-const placeholderText =
-  'Start typing verse references to display verse text. (i.e. Gen 1:26, Col 3:4)';
 
-$('input').attr('placeholder', placeholderText);
+$('.copyright').text(
+  `Holy Bible Recovery Version © ${new Date().getFullYear()} Living Stream Ministry`
+);
 
 // toggle
 $('.toggle-btn').click(() => {
@@ -18,12 +37,15 @@ $('.toggle-btn').click(() => {
   $('input').toggleClass('dark');
 });
 
-// this function clears the screen
+// this function clears the search-results-area
 function reset() {
-  // clears out previous verses
-  $('.verses').empty();
-  // clears input
-  $('.verse-ref-input').val('');
+  // clears out previous searches
+  $('.search-results').empty();
+  // clears inputs
+  $('.verse-input').val('');
+  $('.question-input').val('');
+  // displays spinner
+  $('.loader').removeAttr('hidden');
   // removes warning
   $('.warning').text('').hide();
   // hides message about copying text by clicking
@@ -32,45 +54,38 @@ function reset() {
   $('.does-not-exist').hide();
 }
 
-// creating cache to store previous searches so don't have fetch data, optimized results
-const loggedSearches = {};
+function clearPreviousSearches() {
+  // clears out previous searches
+  $('.search-results').empty();
+}
 
-function logSearches(search) {
+function displayPreviousSearches(search) {
   $('#previous-searches').append(`
-      <div class="ref-container">
+      <div class="container">
         <p class="bold">
           ${search}
         </p>
         <button class="btn search-btn" id="${search}">
-          Search
+          View
         </button>
       </div>
     `);
 
   $('.search-btn').on('click', function () {
-    fetchData(this.id);
+    retrieveAndDisplayData(this.id);
   });
 
   $('.previous-searches-container').show();
 }
 
-function findVerse() {
-  // $('.output-area').focus();
-  const reference = $('.verse-ref-input').val();
-  if (reference.length === 0) {
-    return;
-  } else {
-    fetchData(reference);
-  }
-}
-
-function fetchData(ref) {
-  // if reference is in cache - has been searched before
-
-  if (loggedSearches[ref]) {
-    const data = loggedSearches[ref];
-    reset();
-    $('.copy-msg').show();
+function retrieveAndDisplayData(searchData) {
+  const data = loggedSearches[searchData];
+  console.log('data', data);
+  clearPreviousSearches();
+  $('.copy-msg').show();
+  // if verse search
+  if (data.copyright) {
+    // if more than one verse
     if (data.verses.length > 1) {
       if (data.message) {
         $('.warning').text(data.message.slice(7)).show();
@@ -78,78 +93,127 @@ function fetchData(ref) {
       for (let i = 0; i < data.verses.length; i++) {
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-        const message = `<p class='verse-text'><span class='bold'>${ref}</span> - ${text} </p>`;
-        $('.verses').append(message);
+        const message = `<p class='text'><span class='bold'>${ref}</span> - ${text} </p>`;
+        $('.search-results').append(message);
+        $('.text').click((e) => addToClipboard(e));
       }
-    } else {
+      // if one verse
+    } else if (data.verses.length === 1) {
       const ref = data.verses[0].ref;
       const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
       const message = `
-        <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
-      $('.verses').append(message);
+          <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+      $('.search-results').append(message);
+      $('.text').click((e) => addToClipboard(e));
     }
-    $('.verse-text').click(function () {
-      navigator.clipboard.writeText($(this).text().trim());
-      $(this).addClass('copied');
-      setTimeout(() => {
-        $(this).removeClass('copied');
-      }, 100);
-    });
-  } // if reference is not in cache - has never been searched
-  else {
-    fetch(`https://api.lsm.org/recver.php?String=${ref}&Out=json`)
-      .then((res) => res.json())
-      .then((data) => {
-        reset();
-        $('.copy-msg').show();
-        loggedSearches[ref] = data;
-
-        if (data.verses.length > 1) {
-          if (data.message) {
-            // if there are more than 30 verses in request
-            $('.warning').text(data.message.slice(7)).show();
-          }
-          for (let i = 0; i < data.verses.length; i++) {
-            const ref = data.verses[i].ref;
-            const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-            const message = `
-              <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
-            $('.verses').append(message);
-          }
-          $('.verse-text').click(function () {
-            navigator.clipboard.writeText($(this).text().trim());
-            $(this).addClass('copied');
-            setTimeout(() => {
-              $(this).removeClass('copied');
-            }, 100);
-          });
-        } else {
-          // error handling
-          if (data.verses[0].text.includes('No such')) {
-            $('.copy-msg').hide();
-            $('.does-not-exist')
-              .show()
-              .text(`${data.inputstring} is an invalid reference. Try again.`);
-            setTimeout(() => {
-              $('.does-not-exist').hide().text('');
-            }, 2000);
-            return;
-          }
-          const ref = data.verses[0].ref;
-          const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
-          const message = `
-            <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
-          $('.verses').append(`<p>${message}</p>`);
-          $('.verse-text').click(function () {
-            navigator.clipboard.writeText($(this).text());
-            $(this).addClass('copied');
-            setTimeout(() => {
-              $(this).removeClass('copied');
-            }, 100);
-          });
-        }
-        logSearches(ref.trim());
-      })
-      .catch((err) => console.log(err));
   }
+  // if gpt
+  else {
+    const message = `<p class='text'>${data}</p>`;
+    $('.search-results').append(message);
+    $('.text').click((e) => addToClipboard(e));
+  }
+  console.log('finished executing');
+}
+
+function checkLog(searchData) {
+  // if reference is in cache - has been searched before
+  // $('.titles').empty();
+  if (loggedSearches[searchData]) {
+    return true;
+  } else return false;
+}
+
+function findVerse() {
+  // $('.search-results-area').focus();
+  const searchData = $('.verse-input').val();
+
+  if (searchData.length === 0) {
+    return;
+  } else {
+    if (checkLog(searchData) === true) {
+      console.log('checking log', checkLog(searchData));
+      retrieveAndDisplayData(searchData);
+    } else {
+      fetchData(searchData);
+    }
+  }
+}
+
+async function askChatGPT() {
+  $('.search-results').empty();
+  const userQuestion = $('.question-input').val();
+  const slicedUserQuestion = userQuestion.slice(0, 50) + '...';
+  // checkLog(userQuestion);
+  if (userQuestion.length === 0) {
+    return;
+  } else {
+    const question = `<p class='text'>${userQuestion}</p>`;
+    $('.search-results').append(question);
+    reset();
+    const response = await main(userQuestion);
+    loggedSearches[slicedUserQuestion] = response;
+    const message = `<p class='answer-text'>${response}</p>`;
+    $('.search-results').append(message);
+    $('.loader').attr('hidden', true);
+  }
+  displayPreviousSearches(slicedUserQuestion);
+}
+
+function fetchData(searchData) {
+  reset();
+  fetch(`https://api.lsm.org/recver.php?String=${searchData}&Out=json`)
+    .then((res) => res.json())
+    .then((data) => {
+      $('.loader').attr('hidden', true);
+      $('.copy-msg').show();
+      loggedSearches[searchData] = data;
+      // if there is one verse
+      if (data.verses.length === 1) {
+        const ref = data.verses[0].ref;
+        const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
+        const message = `
+            <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+        $('.search-results').append(`<p>${message}</p>`);
+        $('.text').click((e) => addToClipboard(e));
+
+        // if there are more than 30 verses
+      } else if (data.verses.length > 1) {
+        // if there is a warning message
+        if (data.message) {
+          console.log('message', data.message);
+          $('.warning').text(data.message.slice(7)).show();
+        }
+        for (let i = 0; i < data.verses.length; i++) {
+          const ref = data.verses[i].ref;
+          const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
+          const message = `
+              <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+          $('.search-results').append(message);
+          $('.text').click((e) => addToClipboard(e));
+        }
+      } else {
+        // error handling
+        if (data.verses[0].text.includes('No such')) {
+          $('.copy-msg').hide();
+          $('.does-not-exist')
+            .show()
+            .text(`${data.inputstring} is an invalid reference. Try again.`);
+          setTimeout(() => {
+            $('.does-not-exist').hide().text('');
+          }, 2000);
+          return;
+        }
+      }
+      displayPreviousSearches(searchData);
+    })
+    .catch((err) => console.log(err));
+}
+
+function addToClipboard(event) {
+  navigator.clipboard.writeText(event.target.outerText);
+  $(event.target).addClass('copied');
+  setTimeout(() => {
+    $(event.target).removeClass('copied');
+  }, 100);
 }
