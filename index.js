@@ -155,6 +155,9 @@ async function askChatGPT() {
     userQuestion.length > 50 ? userQuestion.slice(0, 50) + '...' : userQuestion;
   if (userQuestion.length === 0) {
     return;
+  } else if (loggedSearches[userQuestion]) {
+    console.log('found in log');
+    retrieveAndDisplayData(userQuestion);
   } else {
     reset();
     const question = `<p class='text'>${userQuestion}</p>`;
