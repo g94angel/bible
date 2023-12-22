@@ -1,4 +1,4 @@
-import { main } from './ai';
+import { main } from './openai';
 
 // creating cache to store previous searches so don't have fetch data, optimized results
 const loggedSearches = {};
@@ -8,8 +8,8 @@ $('.primary-btn').click(findVerse);
 // adds askChatGPT func to secondary button
 $('.secondary-btn').click(askChatGPT);
 
-const placeholderText = 'Search for verses (i.e. Gen 1:26, Col 3:4)';
-const secondPlaceholderText = 'Where does the Bible talk about ...';
+const placeholderText = 'Search for verses (i.e. Gen 1:26, Col 3)';
+const secondPlaceholderText = 'Ask a question (i.e. What is Revelation about?)';
 
 $('input').attr('placeholder', placeholderText);
 $('.question-input').attr('placeholder', secondPlaceholderText);
@@ -64,12 +64,10 @@ function clearPreviousSearchResults() {
 }
 
 function displayPreviousSearches(searchData, displayed) {
-  console.log('inside display previous searches', searchData);
-  if (displayed === true) {
-    console.log('not adding');
-    return;
-  }
-  $('#previous-searches').append(`
+  // clicking on the view button causes the code to run multiple times
+  // console.log('inside display previous searches', searchData);
+  if (displayed === false) {
+    $('.previous-searches-container').append(`
     <div class="container">
       <p class="bold">${searchData}</p>
       <button
@@ -79,12 +77,11 @@ function displayPreviousSearches(searchData, displayed) {
         View
       </button>
     </div>`);
-  // $('.text').click((e) => addToClipboard(e));
-  $('.search-btn').click(function () {
-    retrieveAndDisplayData(this.id);
-  });
-
-  $('.previous-searches-container').show();
+    $('.search-btn').on('click', function () {
+      retrieveAndDisplayData(this.id);
+    });
+    $('.previous-searches-container').show();
+  }
 }
 
 function retrieveAndDisplayData(searchData) {
@@ -101,37 +98,29 @@ function retrieveAndDisplayData(searchData) {
       for (let i = 0; i < data.verses.length; i++) {
         const ref = data.verses[i].ref;
         const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
-        const message = `<p class='text'><span class='bold'>${ref}</span> - ${text} </p>`;
+        const message = `<p class='verse-text'><span class='bold'>${ref}</span> - ${text} </p>`;
         $('.search-results').append(message);
-        $('.text').click((e) => addToClipboard(e));
+        $('.verse-text').click((e) => addToClipboard(e));
       }
       // if one verse
     } else if (data.verses.length === 1) {
       const ref = data.verses[0].ref;
       const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
       const message = `
-          <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+          <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
       $('.search-results').append(message);
-      $('.text').click((e) => addToClipboard(e));
+      $('.verse-text').click((e) => addToClipboard(e));
     }
   }
   // if gpt search
   else if (typeof data === 'string') {
-    const message = `<p class='text'>${data}</p>`;
-    $('.search-results').append(message);
-    $('.text').click((e) => addToClipboard(e));
+    const question = `<h3 class='question-text'>${searchData}</h3>`;
+    const message = `<p class='answer-text'>${data}</p>`;
+    $('.search-results').append(question, message);
+    $('.answer-text').click((e) => addToClipboard(e));
   }
-  console.log('not adding to previous searches');
   displayPreviousSearches(searchData, true);
 }
-
-// function checkLog(searchData) {
-//   // if reference is in cache - has been searched before
-//   // $('.titles').empty();
-//   if (loggedSearches[searchData]) {
-//     return true;
-//   } else return false;
-// }
 
 function findVerse() {
   // $('.search-results-area').focus();
@@ -140,10 +129,8 @@ function findVerse() {
     return;
   } else {
     if (loggedSearches[searchData]) {
-      console.log('found in log');
       retrieveAndDisplayData(searchData);
     } else {
-      console.log('not in log, will make request');
       fetchData(searchData);
     }
   }
@@ -156,18 +143,22 @@ async function askChatGPT() {
   if (userQuestion.length === 0) {
     return;
   } else if (loggedSearches[userQuestion]) {
-    console.log('found in log');
     retrieveAndDisplayData(userQuestion);
   } else {
     reset();
-    const question = `<p class='text'>${userQuestion}</p>`;
-    $('.search-results').append(question);
+    // const question = `<p class='question-text'>${searchData}</p>`;
+    // const message = `<p class='answer-text'>${data}</p>`;
+    // $('.search-results').append(question, message);
+    // $('.answer-text').click((e) => addToClipboard(e));
+    const question = `<p class='question-text'>${userQuestion}</p>`;
     const response = await main(userQuestion);
     loggedSearches[userQuestion] = response;
     const message = `<p class='answer-text'>${response}</p>`;
-    $('.search-results').append(message);
+    $('.search-results').append(question, message);
+    $('.answer-text').click((e) => addToClipboard(e));
     $('.loader').attr('hidden', true);
-    console.log('adding to previous searches');
+    $('.copy-msg').show();
+
     displayPreviousSearches(userQuestion, false);
   }
 }
@@ -189,37 +180,33 @@ function fetchData(searchData) {
       } else {
         $('.loader').attr('hidden', true);
         $('.copy-msg').show();
-        console.log('storing in log');
+
         loggedSearches[searchData] = data;
 
         if (data.verses.length === 1) {
-          console.log('only one verse');
           const ref = data.verses[0].ref;
           const text = data.verses[0].text.replace(/[\[\]/;]+/g, '');
           const message = `
-            <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+            <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
           $('.search-results').append(`<p>${message}</p>`);
-          $('.text').click((e) => addToClipboard(e));
+          $('.verse-text').click((e) => addToClipboard(e));
 
           // if there are more than 30 verses
         } else if (data.verses.length > 1) {
-          console.log('multiple verses');
           // if there is a warning message
           if (data.message) {
-            console.log('message', data.message);
             $('.warning').text(data.message.slice(7)).show();
           }
           for (let i = 0; i < data.verses.length; i++) {
             const ref = data.verses[i].ref;
             const text = data.verses[i].text.replace(/[\[\]/;]+/g, '');
             const message = `
-              <p class='text'><span class='bold'>${ref}</span> - ${text}</p>`;
+              <p class='verse-text'><span class='bold'>${ref}</span> - ${text}</p>`;
             $('.search-results').append(message);
-            $('.text').click((e) => addToClipboard(e));
+            $('.verse-text').click((e) => addToClipboard(e));
           }
         }
       }
-      console.log('adding to previous searches');
       displayPreviousSearches(searchData, false);
     })
     .catch((err) => console.log(err));
