@@ -54,7 +54,7 @@ input {
 .search-area {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 button {
@@ -160,7 +160,7 @@ input.dark {
 
 .previous-searches-title {
   color: rgb(172, 34, 34);
-  margin: 10px 0;
+  margin: 20px 0;
   text-align: center;
 }
 
@@ -191,7 +191,7 @@ input.dark {
 
 .question-text {
   text-align: center;
-  margin-top: 0;
+  margin: 20px 0;
   color: rgb(172, 34, 34)
 }
 

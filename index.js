@@ -146,18 +146,15 @@ async function askChatGPT() {
     retrieveAndDisplayData(userQuestion);
   } else {
     reset();
-    // const question = `<p class='question-text'>${searchData}</p>`;
-    // const message = `<p class='answer-text'>${data}</p>`;
-    // $('.search-results').append(question, message);
-    // $('.answer-text').click((e) => addToClipboard(e));
-    const question = `<p class='question-text'>${userQuestion}</p>`;
+    const question = `<h3 class='question-text'>${userQuestion}</h3>`;
+    $('.search-results').append(question);
     const response = await main(userQuestion);
     loggedSearches[userQuestion] = response;
-    const message = `<p class='answer-text'>${response}</p>`;
-    $('.search-results').append(question, message);
-    $('.answer-text').click((e) => addToClipboard(e));
     $('.loader').attr('hidden', true);
     $('.copy-msg').show();
+    const message = `<p class='answer-text'>${response}</p>`;
+    $('.search-results').append(message);
+    $('.answer-text').click((e) => addToClipboard(e));
 
     displayPreviousSearches(userQuestion, false);
   }
